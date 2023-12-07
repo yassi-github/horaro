@@ -1,0 +1,9 @@
+.gitignore
+Dockerfile
+Dockerfile.horaro
+Dockerfile.nginx
+Dockerfile.mysql
+compose.yml
+LICENSE.md
+README.md
+*.bkp

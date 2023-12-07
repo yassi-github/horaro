@@ -1,0 +1,24 @@
+FROM php:7.4-fpm-alpine3.16
+
+# install packages
+RUN apk --no-cache add icu-dev && \
+    docker-php-ext-install -j$(nproc) pdo_mysql intl mysqli
+
+# setup PHP-FPM config
+RUN mv "/usr/local/etc/php/php.ini-production" "/usr/local/etc/php/php.ini" && \
+    rm /usr/local/etc/php-fpm.d/www.conf /usr/local/etc/php-fpm.d/www.conf.default
+COPY resources/docker/fpm-pool.conf /usr/local/etc/php-fpm.d/zzz-horaro.conf
+
+# add horaro
+WORKDIR /var/www/horaro
+COPY --from=horaro-builder /build .
+
+# set up horaro directories
+RUN mkdir -p log tmp/session tmp/upload /var/run/php-fpm && \
+    chown -R www-data:www-data log tmp/session tmp/upload /var/run/php-fpm
+
+# finish the image up
+STOPSIGNAL SIGQUIT
+EXPOSE 9000
+USER www-data
+CMD ["./entrypoint.sh"]

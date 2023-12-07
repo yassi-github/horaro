@@ -1,0 +1,7 @@
+FROM mysql:5
+
+COPY ./resources/schema.sql /docker-entrypoint-initdb.d/1_create.sql
+COPY ./resources/seed-data.sql /docker-entrypoint-initdb.d/2_seed.sql
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["mysqld"]
