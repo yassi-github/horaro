@@ -1,0 +1,37 @@
+services:
+  horaro: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      horaro_net:
+        ipv4_address: 172.27.121.11
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: horaro
+      BIND-ADDRESS: 0.0.0.0
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-ppassword", "-h", "172.27.121.12"]
+      timeout: 5s
+      retries: 10
+    networks:
+      horaro_net:
+        ipv4_address: 172.27.121.12
+
+networks:
+  horaro_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.27.121.0/24
