@@ -12,6 +12,7 @@ COPY resources/docker/fpm-pool.conf /usr/local/etc/php-fpm.d/zzz-horaro.conf
 # add horaro
 WORKDIR /var/www/horaro
 COPY --from=horaro-builder /build .
+RUN rm -rf ./www/assets ./www/robots.txt
 
 # set up horaro directories
 RUN mkdir -p log tmp/session tmp/upload /var/run/php-fpm && \

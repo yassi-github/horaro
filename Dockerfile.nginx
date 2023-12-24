@@ -9,6 +9,8 @@ COPY resources/docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # add horaro
 WORKDIR /var/www/horaro
-COPY --from=horaro-builder /build .
+COPY --from=horaro-builder /build/www ./www
+# shrink
+RUN find -name "*.php" -exec truncate -s 0 {} \;
 
 USER www-data

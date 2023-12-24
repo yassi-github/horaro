@@ -1,8 +1,6 @@
 .gitignore
 Dockerfile
-Dockerfile.horaro
-Dockerfile.nginx
-Dockerfile.mysql
+Dockerfile.*
 compose.yml
 LICENSE.md
 README.md

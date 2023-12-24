@@ -23,7 +23,9 @@ RUN npm install grunt-cli && \
 RUN git describe --tags --always > version
 
 # remove temporary files to make the next copy commands easier
-RUN rm -rf assets tmp/assets node_modules .git .gitignore .dockerignore tests
+RUN rm -rf assets tmp/assets node_modules .git tests ; \
+    find -name ".htaccess" -exec rm -f {} \; ; \
+    find -maxdepth 1 -type f | grep -v ".*\.php" | grep -v "version" | grep -v "entrypoint.sh" | xargs -i{} rm -f {}
 
 # set owner for fpm
 RUN chown -R www-data:www-data .
